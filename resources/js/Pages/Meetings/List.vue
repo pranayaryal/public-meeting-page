@@ -14,7 +14,7 @@
 
             <div v-for="meeting in meetings" :key="meeting.id">
               <div class="mt-6 text-gray-500">
-                <inertia-link :href="'/meetings/' + meeting.id" 
+                <inertia-link :href="'/meetings/' + meeting.id + '/public'" 
                   class="ml-4 text-sm text-gray-700">
                   {{ meeting.title }}    
                 </inertia-link>

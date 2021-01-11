@@ -26,4 +26,12 @@ class MeetingsController extends Controller
         ]);
 
     }
+
+    public function showPublic($meetingId)
+    {
+        $meeting = Meeting::find($meetingId);
+        return \Inertia\Inertia::render('Meetings/Show', [
+          'meeting' => $meeting
+        ]);
+    }
 }

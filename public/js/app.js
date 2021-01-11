@@ -4322,6 +4322,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4343,7 +4383,10 @@ __webpack_require__.r(__webpack_exports__);
     return {
       form: this.$inertia.form({
         name: "",
-        email: ""
+        email: "",
+        rsvp: "",
+        items: "",
+        show: false
       }, {
         bag: "postMeetingForm",
         resetOnSuccess: false
@@ -4351,18 +4394,19 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    deletePhoto: function deletePhoto() {
+    register: function register() {
       var _this = this;
 
-      this.$inertia["delete"](route('current-user-photo.destroy'), {
-        preserveScroll: true,
-        onSuccess: function onSuccess() {
-          return _this.photoPreview = null;
-        }
+      this.form.post(route("register"), {
+        preserveScroll: true
+      }).then(function (res) {
+        _this.form.name = "";
+        _this.form.email = "";
+        _this.form.rsvp = "";
+        _this.form.items = "";
+        _this.form.show = false;
+        console.log(res.data);
       });
-    },
-    register: function register() {
-      console.log('you are in register');
     }
   }
 });
@@ -33378,7 +33422,7 @@ var render = function() {
       {
         key: "title",
         fn: function() {
-          return [_vm._v("\n        Rsvp Information\n    ")]
+          return [_vm._v("\n        RSVP Information\n    ")]
         },
         proxy: true
       },
@@ -33441,6 +33485,190 @@ var render = function() {
                   staticClass: "mt-2",
                   attrs: { message: _vm.form.errors.email }
                 })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-span-6 sm:col-span-4" },
+              [
+                _c("jet-label", { attrs: { value: "RSVP" } }),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex justify-between mt-1" }, [
+                  _c(
+                    "div",
+                    [
+                      _c("jet-label", { attrs: { for: "rsvp", value: "Yes" } }),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.rsvp,
+                            expression: "form.rsvp"
+                          }
+                        ],
+                        attrs: { id: "yes", value: "yes", type: "radio" },
+                        domProps: { checked: _vm._q(_vm.form.rsvp, "yes") },
+                        on: {
+                          change: function($event) {
+                            return _vm.$set(_vm.form, "rsvp", "yes")
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    [
+                      _c("jet-label", { attrs: { for: "rsvp", value: "No" } }),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.rsvp,
+                            expression: "form.rsvp"
+                          }
+                        ],
+                        attrs: { id: "no", value: "no", type: "radio" },
+                        domProps: { checked: _vm._q(_vm.form.rsvp, "no") },
+                        on: {
+                          change: function($event) {
+                            return _vm.$set(_vm.form, "rsvp", "no")
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    [
+                      _c("jet-label", {
+                        attrs: { for: "rsvp", value: "Maybe" }
+                      }),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.rsvp,
+                            expression: "form.rsvp"
+                          }
+                        ],
+                        attrs: { id: "maybe", value: "maybe", type: "radio" },
+                        domProps: { checked: _vm._q(_vm.form.rsvp, "maybe") },
+                        on: {
+                          change: function($event) {
+                            return _vm.$set(_vm.form, "rsvp", "maybe")
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "col-span-6 sm:col-span-4 mt-4" },
+                  [
+                    _c("jet-label", {
+                      attrs: { for: "items", value: "Agenda Items" }
+                    }),
+                    _vm._v(" "),
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.items,
+                          expression: "form.items"
+                        }
+                      ],
+                      staticClass:
+                        "border-gray-300 mt-1 block w-full focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm",
+                      attrs: { id: "items", name: "items" },
+                      domProps: { value: _vm.form.items },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.form, "items", $event.target.value)
+                        }
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-span-6 sm:col-span-4 mt-6" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.show,
+                        expression: "form.show"
+                      }
+                    ],
+                    staticClass:
+                      "mt-1 block border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm",
+                    attrs: { id: "show", type: "checkbox" },
+                    domProps: {
+                      checked: Array.isArray(_vm.form.show)
+                        ? _vm._i(_vm.form.show, null) > -1
+                        : _vm.form.show
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.form.show,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 &&
+                              _vm.$set(_vm.form, "show", $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              _vm.$set(
+                                _vm.form,
+                                "show",
+                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                              )
+                          }
+                        } else {
+                          _vm.$set(_vm.form, "show", $$c)
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    { staticClass: "mt-2 text-sm text-gray-700 font-medium" },
+                    [
+                      _vm._v(
+                        _vm._s(
+                          _vm.form.show
+                            ? "Show Agenda On Public Page"
+                            : "Dont Show Agenda On Public Page"
+                        )
+                      )
+                    ]
+                  )
+                ])
               ],
               1
             )
@@ -33607,7 +33835,9 @@ var render = function() {
                             "inertia-link",
                             {
                               staticClass: "ml-4 text-sm text-gray-700",
-                              attrs: { href: "/meetings/" + meeting.id }
+                              attrs: {
+                                href: "/meetings/" + meeting.id + "/public"
+                              }
                             },
                             [
                               _vm._v(
@@ -35216,9 +35446,9 @@ var render = function() {
                     "inertia-link",
                     {
                       staticClass: "text-sm text-gray-700 underline",
-                      attrs: { href: "/dashboard" }
+                      attrs: { href: "/meetings" }
                     },
-                    [_vm._v("\n            Dashboard\n        ")]
+                    [_vm._v("\n           Meetings \n        ")]
                   )
                 : [
                     _c(
