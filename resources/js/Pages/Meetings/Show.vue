@@ -2,7 +2,7 @@
   <app-layout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Meeting 
+        Meeting
       </h2>
     </template>
 
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import AppLayout from "@/Layouts/AppLayout";
+import AppLayout from "@/Layouts/LayoutWithoutAuth";
 import RegistrationForm from './Form';
 import FormContainer from './FormContainer'
 
@@ -90,7 +90,7 @@ export default {
   },
 
   props: {
-    meeting: Array 
+    meeting: Array
   },
 
   created(){

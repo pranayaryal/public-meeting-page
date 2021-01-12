@@ -5,7 +5,7 @@
         </template>
 
         <template #description>
-          Enter your name, email and agenda
+          Enter your name, email, rsvp and agenda
         </template>
 
         <template #form>
@@ -22,7 +22,7 @@
                 <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" />
                 <jet-input-error :message="form.errors.email" class="mt-2" />
             </div>
-             
+
             <!-- RSVP -->
             <div class="col-span-6 sm:col-span-4">
 
@@ -45,7 +45,7 @@
             <!-- Agenda Items -->
             <div class="col-span-6 sm:col-span-4 mt-4">
               <jet-label for="items" value="Agenda Items" />
-              <textarea id="items" name="items" 
+              <textarea id="items" name="items"
                class="border-gray-300 mt-1 block w-full focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                v-model="form.items" />
 
@@ -53,8 +53,8 @@
 
             <!-- Show Agenda -->
             <div class="col-span-6 sm:col-span-4 mt-6">
-              <input id="show" type="checkbox" 
-                class="mt-1 block border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" 
+              <input id="show" type="checkbox"
+                class="mt-1 block border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                 v-model="form.show" />
               <span class="mt-2 text-sm text-gray-700 font-medium">{{ form.show ? 'Show Agenda On Public Page' : 'Dont Show Agenda On Public Page' }}</span>
 
@@ -104,7 +104,7 @@
                     email: "",
                     rsvp: "",
                     items: "",
-                    show: false 
+                    show: false
                 },
                 {
                   bag: "postMeetingForm",
@@ -130,7 +130,7 @@
                 this.form.show = false;
                 console.log(res.data);
               });
-              
+
             }
         },
     }
