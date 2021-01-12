@@ -40,14 +40,16 @@
                 <jet-label for="rsvp" value="Maybe" />
                 <input id="maybe" value="maybe" type="radio" v-model="form.rsvp" />
               </div>
+              <jet-input-error :message="form.errors.rsvp" class="mt-2" />
             </div>
 
             <!-- Agenda Items -->
             <div class="col-span-6 sm:col-span-4 mt-4">
               <jet-label for="items" value="Agenda Items" />
-              <textarea id="items" name="items" 
+              <textarea id="agenda" name="agenda" 
                class="border-gray-300 mt-1 block w-full focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
-               v-model="form.items" />
+               v-model="form.agenda" />
+              <jet-input-error :message="form.errors.agenda" class="mt-2" />
 
             </div>
 
@@ -57,6 +59,7 @@
                 class="mt-1 block border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" 
                 v-model="form.show" />
               <span class="mt-2 text-sm text-gray-700 font-medium">{{ form.show ? 'Show Agenda On Public Page' : 'Dont Show Agenda On Public Page' }}</span>
+              <jet-input-error :message="form.errors.show" class="mt-2" />
 
             </div>
 
@@ -96,6 +99,15 @@
             JetSecondaryButton,
         },
 
+        props: {
+          meeting: Array
+        },
+
+        created(){
+          console.log(`This is start ${this.meeting.id} from Form.vue`);
+          
+        },
+        
 
         data() {
             return {
@@ -103,14 +115,10 @@
                     name: "",
                     email: "",
                     rsvp: "",
-                    items: "",
-                    show: false 
-                },
-                {
-                  bag: "postMeetingForm",
-                  resetOnSuccess: false,
-                }
-                )
+                    agenda: "",
+                    show: false,
+                    meeting_id: this.meeting.id 
+                })
 
             };
         },
@@ -119,7 +127,8 @@
 
             register(){
               this.form
-              .post(route("register"), {
+              .post(route("meetings.register"), {
+                errorBag: 'postMeetingForm',
                 preserveScroll: true,
               })
               .then((res) => {

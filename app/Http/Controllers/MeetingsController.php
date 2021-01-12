@@ -34,4 +34,22 @@ class MeetingsController extends Controller
           'meeting' => $meeting
         ]);
     }
+
+    public function register(Request $request)
+    {
+
+        $request->validateWithBag('postMeetingForm', [
+        'email' => 'required|email:rfc,dns',
+        'name' => 'required|string',
+        'title' => 'required|string',
+        'rsvp' => 'required|string',
+        'agenda' => 'required|string',
+        'meeting_id' => 'required|integer',
+        'show' => 'required|boolean'
+
+    ]);
+
+    return Redirect::route('public.show');
+         
+    }
 }

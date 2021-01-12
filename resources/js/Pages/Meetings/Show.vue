@@ -69,7 +69,7 @@
             </div>
           </div>
         <div class="p-16">
-          <registration-form />
+          <registration-form :meeting="meeting" />
         </div>
         </div>
       </div>
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import AppLayout from "@/Layouts/AppLayout";
+import AppLayout from "@/Layouts/LayoutWithoutAuth";
 import RegistrationForm from './Form';
 import FormContainer from './FormContainer'
 
