@@ -90,11 +90,13 @@ export default {
   },
 
   props: {
-    meeting: Array
+    meeting: Array | Object,
+    registrations: Array
   },
 
   created(){
     console.log(this.meeting.start.substring(0,10));
+    console.log(this.registrations);
   },
 
 };
