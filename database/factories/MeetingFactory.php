@@ -28,7 +28,10 @@ class MeetingFactory extends Factory
             'location' => $this->faker->address,
             'start' => $start,
             'end' => $this->faker->dateTimeBetween($start, '+2 months'),
+<<<<<<< HEAD
 
+=======
+>>>>>>> 725251808e590e57407bc8c314f28126062528cd
         ];
     }
 }

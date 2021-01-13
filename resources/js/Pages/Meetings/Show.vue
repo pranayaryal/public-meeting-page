@@ -69,7 +69,7 @@
             </div>
           </div>
         <div class="p-16">
-          <registration-form />
+          <registration-form :meeting="meeting" />
         </div>
         </div>
       </div>
