@@ -87,6 +87,7 @@
     import JetLabel from '@/Jetstream/Label'
     import JetActionMessage from '@/Jetstream/ActionMessage'
     import JetSecondaryButton from '@/Jetstream/SecondaryButton'
+    import JetDropDown from '@/Jetstream/Dropdown'
 
     export default {
         components: {
@@ -100,7 +101,7 @@
         },
 
         props: {
-          meeting: Array
+          meeting: Array | Object
         },
 
         created(){
@@ -129,15 +130,7 @@
               this.form
               .post(route("meetings.register"), {
                 errorBag: 'postMeetingForm',
-                preserveScroll: true,
-              })
-              .then((res) => {
-                this.form.name = "";
-                this.form.email = "";
-                this.form.rsvp = "";
-                this.form.items = "";
-                this.form.show = false;
-                console.log(res.data);
+                preserveScroll: true
               });
               
             }

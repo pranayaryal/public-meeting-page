@@ -4406,6 +4406,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Jetstream_Label__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Jetstream/Label */ "./resources/js/Jetstream/Label.vue");
 /* harmony import */ var _Jetstream_ActionMessage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Jetstream/ActionMessage */ "./resources/js/Jetstream/ActionMessage.vue");
 /* harmony import */ var _Jetstream_SecondaryButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/Jetstream/SecondaryButton */ "./resources/js/Jetstream/SecondaryButton.vue");
+/* harmony import */ var _Jetstream_Dropdown__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/Jetstream/Dropdown */ "./resources/js/Jetstream/Dropdown.vue");
 //
 //
 //
@@ -4487,6 +4488,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -4505,7 +4507,7 @@ __webpack_require__.r(__webpack_exports__);
     JetSecondaryButton: _Jetstream_SecondaryButton__WEBPACK_IMPORTED_MODULE_6__.default
   },
   props: {
-    meeting: Array
+    meeting: Array | Object
   },
   created: function created() {
     console.log("This is start ".concat(this.meeting.id, " from Form.vue"));
@@ -4524,18 +4526,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     register: function register() {
-      var _this = this;
-
       this.form.post(route("meetings.register"), {
         errorBag: 'postMeetingForm',
         preserveScroll: true
-      }).then(function (res) {
-        _this.form.name = "";
-        _this.form.email = "";
-        _this.form.rsvp = "";
-        _this.form.items = "";
-        _this.form.show = false;
-        console.log(res.data);
       });
     }
   }
@@ -4749,10 +4742,12 @@ __webpack_require__.r(__webpack_exports__);
     FormContainer: _FormContainer__WEBPACK_IMPORTED_MODULE_2__.default
   },
   props: {
-    meeting: Array
+    meeting: Array | Object,
+    registrations: Array
   },
   created: function created() {
     console.log(this.meeting.start.substring(0, 10));
+    console.log(this.registrations);
   }
 });
 
