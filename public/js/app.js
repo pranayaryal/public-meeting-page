@@ -4507,28 +4507,52 @@ __webpack_require__.r(__webpack_exports__);
     JetSecondaryButton: _Jetstream_SecondaryButton__WEBPACK_IMPORTED_MODULE_6__.default
   },
   props: {
-    meeting: Array | Object
+    meeting: Array | Object,
+    registrations: Array | Object
   },
   created: function created() {
     console.log("This is start ".concat(this.meeting.id, " from Form.vue"));
   },
   data: function data() {
     return {
-      form: this.$inertia.form({
+      form: {
         name: "",
         email: "",
         rsvp: "",
         agenda: "",
-        show: false,
-        meeting_id: this.meeting.id
-      })
+        show: true,
+        meeting_id: this.meeting.id,
+        errors: {
+          name: "",
+          email: "",
+          rsvp: "",
+          agenda: "",
+          show: ''
+        }
+      }
     };
   },
   methods: {
     register: function register() {
-      this.form.post(route("meetings.register"), {
-        errorBag: 'postMeetingForm',
-        preserveScroll: true
+      var _this = this;
+
+      axios.post(route("meetings.register"), {
+        name: this.form.name,
+        email: this.form.email,
+        rsvp: this.form.rsvp,
+        agenda: this.form.agenda,
+        show: this.form.show,
+        meeting_id: this.meeting.id
+      }).then(function () {
+        console.log('success');
+
+        _this.form.reset();
+      })["catch"](function (error) {
+        console.log(error.response.data.errors);
+        _this.form.errors.email = error.response.data.errors.email[0];
+        _this.form.errors.name = error.response.data.errors.name[0];
+        _this.form.errors.rsvp = error.response.data.errors.rsvp[0];
+        _this.form.errors.agenda = error.response.data.errors.agenda[0];
       });
     }
   }
@@ -4743,11 +4767,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     meeting: Array | Object,
-    registrations: Array
+    registrations: Array,
+    registrationExists: Boolean
   },
   created: function created() {
     console.log(this.meeting.start.substring(0, 10));
     console.log(this.registrations);
+    console.log("The registration exists is ".concat(this.registrationExists));
   }
 });
 
@@ -31850,7 +31876,6 @@ render._withStripped = true
 /***/ }),
 
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Layouts/LayoutWithoutAuth.vue?vue&type=template&id=192a4e32&":
-<<<<<<< HEAD
 /*!**************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Layouts/LayoutWithoutAuth.vue?vue&type=template&id=192a4e32& ***!
   \**************************************************************************************************************************************************************************************************************************/
@@ -31918,207 +31943,6 @@ var render = function() {
                           [
                             _vm._v(
                               "\n                               Meetings\n                            "
-                            )
-                          ]
-                        )
-                      ],
-                      1
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "-mr-2 flex items-center sm:hidden" },
-                    [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out",
-                          on: {
-                            click: function($event) {
-                              _vm.showingNavigationDropdown = !_vm.showingNavigationDropdown
-                            }
-                          }
-                        },
-                        [
-                          _c(
-                            "svg",
-                            {
-                              staticClass: "h-6 w-6",
-                              attrs: {
-                                stroke: "currentColor",
-                                fill: "none",
-                                viewBox: "0 0 24 24"
-                              }
-                            },
-                            [
-                              _c("path", {
-                                class: {
-                                  hidden: _vm.showingNavigationDropdown,
-                                  "inline-flex": !_vm.showingNavigationDropdown
-                                },
-                                attrs: {
-                                  "stroke-linecap": "round",
-                                  "stroke-linejoin": "round",
-                                  "stroke-width": "2",
-                                  d: "M4 6h16M4 12h16M4 18h16"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("path", {
-                                class: {
-                                  hidden: !_vm.showingNavigationDropdown,
-                                  "inline-flex": _vm.showingNavigationDropdown
-                                },
-                                attrs: {
-                                  "stroke-linecap": "round",
-                                  "stroke-linejoin": "round",
-                                  "stroke-width": "2",
-                                  d: "M6 18L18 6M6 6l12 12"
-                                }
-                              })
-                            ]
-                          )
-                        ]
-                      )
-                    ]
-                  )
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "sm:hidden",
-                class: {
-                  block: _vm.showingNavigationDropdown,
-                  hidden: !_vm.showingNavigationDropdown
-                }
-              },
-              [
-                _c(
-                  "div",
-                  { staticClass: "pt-2 pb-3 space-y-1" },
-                  [
-                    _c(
-                      "jet-responsive-nav-link",
-                      {
-                        attrs: {
-                          href: _vm.route("dashboard"),
-                          active: _vm.route().current("dashboard")
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                        Dashboard\n                    "
-                        )
-                      ]
-                    )
-                  ],
-                  1
-                )
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("header", { staticClass: "bg-white shadow" }, [
-            _c(
-              "div",
-              { staticClass: "max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8" },
-              [_vm._t("header")],
-              2
-            )
-          ]),
-          _vm._v(" "),
-          _c("main", [_vm._t("default")], 2),
-          _vm._v(" "),
-          _c("portal-target", { attrs: { name: "modal", multiple: "" } })
-        ],
-        1
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Pages/API/ApiTokenManager.vue?vue&type=template&id=00438600&":
-=======
->>>>>>> 725251808e590e57407bc8c314f28126062528cd
-/*!**************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/Layouts/LayoutWithoutAuth.vue?vue&type=template&id=192a4e32& ***!
-  \**************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => /* binding */ render,
-/* harmony export */   "staticRenderFns": () => /* binding */ staticRenderFns
-/* harmony export */ });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("jet-banner"),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "min-h-screen bg-gray-100" },
-        [
-          _c("nav", { staticClass: "bg-white border-b border-gray-100" }, [
-            _c(
-              "div",
-              { staticClass: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" },
-              [
-                _c("div", { staticClass: "flex justify-between h-16" }, [
-                  _c("div", { staticClass: "flex" }, [
-                    _c(
-                      "div",
-                      { staticClass: "flex-shrink-0 flex items-center" },
-                      [
-                        _c(
-                          "inertia-link",
-                          { attrs: { href: "/meetings" } },
-                          [
-                            _c("jet-application-mark", {
-                              staticClass: "block h-9 w-auto"
-                            })
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "hidden space-x-8 sm:-my-px sm:ml-10 sm:flex"
-                      },
-                      [
-                        _c(
-                          "jet-nav-link",
-                          {
-                            attrs: {
-                              href: _vm.route("meetings"),
-                              active: _vm.route().current("meetings")
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                               Meetings \n                            "
                             )
                           ]
                         )
@@ -34669,7 +34493,14 @@ var render = function() {
               _c(
                 "div",
                 { staticClass: "p-16" },
-                [_c("registration-form", { attrs: { meeting: _vm.meeting } })],
+                [
+                  _c("registration-form", {
+                    attrs: {
+                      meeting: _vm.meeting,
+                      registrations: _vm.registrations
+                    }
+                  })
+                ],
                 1
               )
             ]
