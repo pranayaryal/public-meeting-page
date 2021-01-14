@@ -101,25 +101,31 @@
         },
 
         props: {
-          meeting: Array | Object
+          meeting: Array | Object,
+          registrations: Array | Object
         },
 
         created(){
-          console.log(`This is start ${this.meeting.id} from Form.vue`);
-          
         },
         
 
         data() {
             return {
-                form: this.$inertia.form({
+                form: {
                     name: "",
                     email: "",
                     rsvp: "",
                     agenda: "",
                     show: false,
-                    meeting_id: this.meeting.id 
-                })
+                    meeting_id: this.meeting.id,
+                    errors: {
+                      name: "",
+                      email: "",
+                      rsvp: "",
+                      agenda: "",
+                      show: ''
+                    }
+                }
 
             };
         },
@@ -127,13 +133,28 @@
         methods: {
 
             register(){
-              this.form
-              .post(route("meetings.register"), {
-                errorBag: 'postMeetingForm',
-                preserveScroll: true
-              });
+              axios.post(route("meetings.register"), {
+                name: this.form.name,
+                email: this.form.email,
+                rsvp: this.form.rsvp,
+                agenda: this.form.agenda,
+                show: this.form.show,
+                meeting_id: this.meeting.id
+              }).then(() => {
+                console.log('success');
+                this.form.reset();
+                
+              }).catch(error => {
+                this.form.errors.email = error.response.data.errors.email[0];
+                this.form.errors.name = error.response.data.errors.name[0];
+                this.form.errors.rsvp = error.response.data.errors.rsvp[0];
+                this.form.errors.agenda = error.response.data.errors.agenda[0];
+                this.form.errors.show = error.response.data.errors.show[0];
+                
+              })
               
             }
+
         },
     }
 </script>

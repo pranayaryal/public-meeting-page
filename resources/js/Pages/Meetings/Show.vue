@@ -69,7 +69,7 @@
             </div>
           </div>
         <div class="p-16">
-          <registration-form :meeting="meeting" />
+          <registration-form :meeting="meeting" :registrations="registrations" />
         </div>
         </div>
       </div>
@@ -91,12 +91,14 @@ export default {
 
   props: {
     meeting: Array | Object,
-    registrations: Array
+    registrations: Array,
+    registrationExists: Boolean 
   },
 
   created(){
     console.log(this.meeting.start.substring(0,10));
     console.log(this.registrations);
+    console.log(`The registration exists is ${this.registrationExists}`);
   },
 
 };

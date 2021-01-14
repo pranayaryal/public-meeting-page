@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Meeting;
 use App\Models\Registration;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class MeetingsController extends Controller
 {
@@ -46,7 +46,7 @@ class MeetingsController extends Controller
     {
         $registration = Registration::where([
           'meeting_id' => $meetingId
-        ])->first();
+        ])->get();
 
         return $registration;
 
@@ -54,8 +54,12 @@ class MeetingsController extends Controller
 
     public function register(Request $request)
     {
+        $existing_registration = Registration::where([
+          'meeting_id' => $request->meeting_id,
+          'email' => $request->email
+        ])->first();
 
-        $request->validateWithBag('postMeetingForm', [
+        $request->validate([
         'email' => 'required|email:rfc,dns',
         'name' => 'required|string',
         'rsvp' => 'required|string',
@@ -63,14 +67,7 @@ class MeetingsController extends Controller
         'meeting_id' => 'required|integer',
         'show' => 'required|boolean'
 
-    ]);
-
-
-
-      $existing_registration = Registration::where([
-        'meeting_id' => $request->meeting_id,
-        'email' => $request->email
-      ])->first();
+      ]);
 
 
       if ($existing_registration == null){
@@ -83,17 +80,24 @@ class MeetingsController extends Controller
           $registration->show_public = $request->show;
 
           $registration->save();
+          return Redirect::route('dashboard');
 
 
       }
+      else {
 
-      $meeting = Meeting::find($request->meeting_id);
-      $registrations = $this->getRegistrations($request->meeting_id);
+        $meeting = Meeting::find($request->meeting_id);
+        $registrations = $this->getRegistrations($request->meeting_id);
 
-      return \Inertia\Inertia::render('Meetings/Show', [
-        'meeting' => $meeting,
-        'registrations' => $registrations
-      ]);
+
+        return \Inertia\Inertia::render('Meetings/Show', [
+          'meeting' => $meeting,
+          'registrations' => $registrations,
+          'registrationExists' => true
+        ]);
+      }
+
+
 
          
     }

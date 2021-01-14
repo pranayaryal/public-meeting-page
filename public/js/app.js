@@ -4507,28 +4507,50 @@ __webpack_require__.r(__webpack_exports__);
     JetSecondaryButton: _Jetstream_SecondaryButton__WEBPACK_IMPORTED_MODULE_6__.default
   },
   props: {
-    meeting: Array | Object
+    meeting: Array | Object,
+    registrations: Array | Object
   },
-  created: function created() {
-    console.log("This is start ".concat(this.meeting.id, " from Form.vue"));
-  },
+  created: function created() {},
   data: function data() {
     return {
-      form: this.$inertia.form({
+      form: {
         name: "",
         email: "",
         rsvp: "",
         agenda: "",
         show: false,
-        meeting_id: this.meeting.id
-      })
+        meeting_id: this.meeting.id,
+        errors: {
+          name: "",
+          email: "",
+          rsvp: "",
+          agenda: "",
+          show: ''
+        }
+      }
     };
   },
   methods: {
     register: function register() {
-      this.form.post(route("meetings.register"), {
-        errorBag: 'postMeetingForm',
-        preserveScroll: true
+      var _this = this;
+
+      axios.post(route("meetings.register"), {
+        name: this.form.name,
+        email: this.form.email,
+        rsvp: this.form.rsvp,
+        agenda: this.form.agenda,
+        show: this.form.show,
+        meeting_id: this.meeting.id
+      }).then(function () {
+        console.log('success');
+
+        _this.form.reset();
+      })["catch"](function (error) {
+        _this.form.errors.email = error.response.data.errors.email[0];
+        _this.form.errors.name = error.response.data.errors.name[0];
+        _this.form.errors.rsvp = error.response.data.errors.rsvp[0];
+        _this.form.errors.agenda = error.response.data.errors.agenda[0];
+        _this.form.errors.show = error.response.data.errors.show[0];
       });
     }
   }
@@ -4743,11 +4765,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     meeting: Array | Object,
-    registrations: Array
+    registrations: Array,
+    registrationExists: Boolean
   },
   created: function created() {
     console.log(this.meeting.start.substring(0, 10));
     console.log(this.registrations);
+    console.log("The registration exists is ".concat(this.registrationExists));
   }
 });
 
@@ -34465,7 +34489,14 @@ var render = function() {
               _c(
                 "div",
                 { staticClass: "p-16" },
-                [_c("registration-form", { attrs: { meeting: _vm.meeting } })],
+                [
+                  _c("registration-form", {
+                    attrs: {
+                      meeting: _vm.meeting,
+                      registrations: _vm.registrations
+                    }
+                  })
+                ],
                 1
               )
             ]
