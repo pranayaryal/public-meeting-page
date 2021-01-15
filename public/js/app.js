@@ -4551,12 +4551,11 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     validate: function validate() {
       console.log('you are in validate');
-      console.log('checking if email exits ...');
       this.form.errors.emailExists = this.checkIfEmailAssociatedWithMeeting() ? 'That email already exists for this meeting' : '';
-      this.form.errors.email = this.validateEmail() ? '' : 'Email is incorrect';
+      this.form.errors.email = this.validateEmail() ? '' : 'Email is incorrect. Please check your email';
       this.form.errors.agenda = this.form.agenda === '' ? 'Agenda is required' : '';
       this.form.errors.name = this.form.name === '' ? 'Name is required' : '';
-      return this.form.nameValidated && this.form.rsvpValidated && this.form.agendaValidated && this.form.emailValidated && this.checkIfEmailAssociatedWithMeeting();
+      return this.form.errors.email === '' && this.form.errors.name == '' && this.form.errors.agenda == '' && this.validateEmail() && !this.checkIfEmailAssociatedWithMeeting();
     },
     checkIfEmailAssociatedWithMeeting: function checkIfEmailAssociatedWithMeeting() {
       var _this = this;
@@ -4575,6 +4574,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     register: function register() {
       var _this2 = this;
+
+      console.log(this.validate());
 
       if (this.validate()) {
         axios.post(route("meetings.register"), {

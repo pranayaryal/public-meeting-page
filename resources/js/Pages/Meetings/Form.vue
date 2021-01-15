@@ -12,10 +12,10 @@
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="name" value="Name" />
-                <!-- <jet-input id="name" 
-                  type="text" 
-                  class="mt-1 block w-full" 
-                  v-model="form.name" 
+                <!-- <jet-input id="name"
+                  type="text"
+                  class="mt-1 block w-full"
+                  v-model="form.name"
                   autocomplete="name"
                    /> -->
                 <input class=" mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
@@ -151,33 +151,33 @@
         methods: {
             validate(){
               console.log('you are in validate');
-              console.log('checking if email exits ...');
-              this.form.errors.emailExists = 
-                this.checkIfEmailAssociatedWithMeeting() ? 
+              this.form.errors.emailExists =
+                this.checkIfEmailAssociatedWithMeeting() ?
                 'That email already exists for this meeting': '';
-              this.form.errors.email = this.validateEmail() ? '': 'Email is incorrect';
-              this.form.errors.agenda = this.form.agenda === '' ? 
+              this.form.errors.email = this.validateEmail() ? '': 'Email is incorrect. Please check your email';
+              this.form.errors.agenda = this.form.agenda === '' ?
                   'Agenda is required': '';
-              this.form.errors.name = this.form.name === '' ? 
+              this.form.errors.name = this.form.name === '' ?
                   'Name is required': '';
 
-              return this.form.nameValidated && this.form.rsvpValidated
-                      && this.form.agendaValidated 
-                      && this.form.emailValidated
-                      && this.checkIfEmailAssociatedWithMeeting()
+              return this.form.errors.email === ''
+                      && this.form.errors.name == ''
+                      && this.form.errors.agenda == ''
+                      && this.validateEmail()
+                      && !this.checkIfEmailAssociatedWithMeeting();
 
-              
+
             },
-            
+
             checkIfEmailAssociatedWithMeeting(){
 
               let emailExists = false;
-                
+
               this.registrations.map(reg => {
                 if(reg.email === this.form.email){
                   emailExists = true;
                 }
-                
+
               })
 
               return emailExists;
@@ -191,6 +191,7 @@
             },
 
             register(){
+              console.log(this.validate());
               if(this.validate()){
                 axios.post(route("meetings.register"), {
                   name: this.form.name,
