@@ -54,50 +54,28 @@ class MeetingsController extends Controller
 
     public function register(Request $request)
     {
-        $existing_registration = Registration::where([
-          'meeting_id' => $request->meeting_id,
-          'email' => $request->email
-        ])->first();
 
-        $request->validate([
-        'email' => 'required|email:rfc,dns',
-        'name' => 'required|string',
-        'rsvp' => 'required|string',
-        'agenda' => 'required|string',
-        'meeting_id' => 'required|integer'
+        $registration = new Registration();
+        $registration->email = $request->email;
+        $registration->name = $request->name;
+        $registration->rsvp = $request->rsvp;
+        $registration->agenda_items = $request->agenda;
+        $registration->meeting_id = $request->meeting_id;
+        $registration->show_public = $request->show;
 
-      ]);
-
-
-      if ($existing_registration == null){
-          $registration = new Registration();
-          $registration->email = $request->email;
-          $registration->name = $request->name;
-          $registration->rsvp = $request->rsvp;
-          $registration->agenda_items = $request->agenda;
-          $registration->meeting_id = $request->meeting_id;
-          $registration->show_public = $request->show;
-
-          $registration->save();
-          return Redirect::route('dashboard');
-
-
-      }
-      else {
+        $registration->save();
 
         $meeting = Meeting::find($request->meeting_id);
         $registrations = $this->getRegistrations($request->meeting_id);
 
-
-        return \Inertia\Inertia::render('Meetings/Show', [
-          'meeting' => $meeting,
+        return json_encode([
           'registrations' => $registrations,
-          'registrationExists' => true
+          'meeting' => $meeting
         ]);
-      }
-
-
-
-
     }
+
+
+
+
+
 }

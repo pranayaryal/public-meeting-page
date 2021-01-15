@@ -12,15 +12,30 @@
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="name" value="Name" />
-                <jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" autocomplete="name" />
+                <!-- <jet-input id="name" 
+                  type="text" 
+                  class="mt-1 block w-full" 
+                  v-model="form.name" 
+                  autocomplete="name"
+                   /> -->
+                <input class=" mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                @change="form.errors.name = ''"
+                type="text"
+                v-model="form.name"
+                autocomplete="name" />
                 <jet-input-error :message="form.errors.name" class="mt-2" />
             </div>
 
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="email" value="Email" />
-                <jet-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" />
+                <input class=" mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                @change="form.errors.email = ''"
+                type="text"
+                v-model="form.email"
+                autocomplete="email" />
                 <jet-input-error :message="form.errors.email" class="mt-2" />
+                <jet-input-error :message="form.errors.emailExists" class="mt-2" />
             </div>
 
             <!-- RSVP -->
@@ -48,7 +63,8 @@
               <jet-label for="items" value="Agenda Items" />
               <textarea id="agenda" name="agenda"
                class="border-gray-300 mt-1 block w-full focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
-               v-model="form.agenda" />
+               v-model="form.agenda"
+               @change="form.errors.agenda = ''" />
               <jet-input-error :message="form.errors.agenda" class="mt-2" />
 
             </div>
@@ -116,14 +132,14 @@
                 form: {
                     name: "",
                     email: "",
-                    rsvp: "",
+                    rsvp: "yes",
                     agenda: "",
                     show: true,
                     meeting_id: this.meeting.id,
                     errors: {
                       name: "",
                       email: "",
-                      rsvp: "",
+                      emailExists: "",
                       agenda: "",
                       show: ''
                     }
@@ -133,27 +149,69 @@
         },
 
         methods: {
+            validate(){
+              console.log('you are in validate');
+              console.log('checking if email exits ...');
+              this.form.errors.emailExists = 
+                this.checkIfEmailAssociatedWithMeeting() ? 
+                'That email already exists for this meeting': '';
+              this.form.errors.email = this.validateEmail() ? '': 'Email is incorrect';
+              this.form.errors.agenda = this.form.agenda === '' ? 
+                  'Agenda is required': '';
+              this.form.errors.name = this.form.name === '' ? 
+                  'Name is required': '';
+
+              return this.form.nameValidated && this.form.rsvpValidated
+                      && this.form.agendaValidated 
+                      && this.form.emailValidated
+                      && this.checkIfEmailAssociatedWithMeeting()
+
+              
+            },
+            
+            checkIfEmailAssociatedWithMeeting(){
+
+              let emailExists = false;
+                
+              this.registrations.map(reg => {
+                if(reg.email === this.form.email){
+                  emailExists = true;
+                }
+                
+              })
+
+              return emailExists;
+
+            },
+
+            validateEmail(){
+              const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+              return re.test(String(this.form.email).toLowerCase());
+
+            },
 
             register(){
-              axios.post(route("meetings.register"), {
-                name: this.form.name,
-                email: this.form.email,
-                rsvp: this.form.rsvp,
-                agenda: this.form.agenda,
-                show: this.form.show,
-                meeting_id: this.meeting.id
-              }).then(() => {
-                console.log('success');
-                this.form.reset();
+              if(this.validate()){
+                axios.post(route("meetings.register"), {
+                  name: this.form.name,
+                  email: this.form.email,
+                  rsvp: this.form.rsvp,
+                  agenda: this.form.agenda,
+                  show: this.form.show,
+                  meeting_id: this.meeting.id
+                }).then(() => {
+                  console.log('success');
+                  this.form.reset();
 
-              }).catch(error => {
-                console.log(error.response.data.errors);
-                this.form.errors.email = error.response.data.errors.email[0];
-                this.form.errors.name = error.response.data.errors.name[0];
-                this.form.errors.rsvp = error.response.data.errors.rsvp[0];
-                this.form.errors.agenda = error.response.data.errors.agenda[0];
+                }).catch(error => {
+                  console.log(error.response.data.errors);
+                  this.form.errors.email = error.response.data.errors.email[0];
+                  this.form.errors.name = error.response.data.errors.name[0];
+                  this.form.errors.rsvp = error.response.data.errors.rsvp[0];
+                  this.form.errors.agenda = error.response.data.errors.agenda[0];
 
-              })
+                })
+              }
 
             }
 

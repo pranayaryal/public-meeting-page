@@ -4488,6 +4488,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4518,14 +4534,14 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         name: "",
         email: "",
-        rsvp: "",
+        rsvp: "yes",
         agenda: "",
         show: true,
         meeting_id: this.meeting.id,
         errors: {
           name: "",
           email: "",
-          rsvp: "",
+          emailExists: "",
           agenda: "",
           show: ''
         }
@@ -4533,27 +4549,53 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    register: function register() {
+    validate: function validate() {
+      console.log('you are in validate');
+      console.log('checking if email exits ...');
+      this.form.errors.emailExists = this.checkIfEmailAssociatedWithMeeting() ? 'That email already exists for this meeting' : '';
+      this.form.errors.email = this.validateEmail() ? '' : 'Email is incorrect';
+      this.form.errors.agenda = this.form.agenda === '' ? 'Agenda is required' : '';
+      this.form.errors.name = this.form.name === '' ? 'Name is required' : '';
+      return this.form.nameValidated && this.form.rsvpValidated && this.form.agendaValidated && this.form.emailValidated && this.checkIfEmailAssociatedWithMeeting();
+    },
+    checkIfEmailAssociatedWithMeeting: function checkIfEmailAssociatedWithMeeting() {
       var _this = this;
 
-      axios.post(route("meetings.register"), {
-        name: this.form.name,
-        email: this.form.email,
-        rsvp: this.form.rsvp,
-        agenda: this.form.agenda,
-        show: this.form.show,
-        meeting_id: this.meeting.id
-      }).then(function () {
-        console.log('success');
-
-        _this.form.reset();
-      })["catch"](function (error) {
-        console.log(error.response.data.errors);
-        _this.form.errors.email = error.response.data.errors.email[0];
-        _this.form.errors.name = error.response.data.errors.name[0];
-        _this.form.errors.rsvp = error.response.data.errors.rsvp[0];
-        _this.form.errors.agenda = error.response.data.errors.agenda[0];
+      var emailExists = false;
+      this.registrations.map(function (reg) {
+        if (reg.email === _this.form.email) {
+          emailExists = true;
+        }
       });
+      return emailExists;
+    },
+    validateEmail: function validateEmail() {
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(this.form.email).toLowerCase());
+    },
+    register: function register() {
+      var _this2 = this;
+
+      if (this.validate()) {
+        axios.post(route("meetings.register"), {
+          name: this.form.name,
+          email: this.form.email,
+          rsvp: this.form.rsvp,
+          agenda: this.form.agenda,
+          show: this.form.show,
+          meeting_id: this.meeting.id
+        }).then(function () {
+          console.log('success');
+
+          _this2.form.reset();
+        })["catch"](function (error) {
+          console.log(error.response.data.errors);
+          _this2.form.errors.email = error.response.data.errors.email[0];
+          _this2.form.errors.name = error.response.data.errors.name[0];
+          _this2.form.errors.rsvp = error.response.data.errors.rsvp[0];
+          _this2.form.errors.agenda = error.response.data.errors.agenda[0];
+        });
+      }
     }
   }
 });
@@ -33867,15 +33909,29 @@ var render = function() {
               [
                 _c("jet-label", { attrs: { for: "name", value: "Name" } }),
                 _vm._v(" "),
-                _c("jet-input", {
-                  staticClass: "mt-1 block w-full",
-                  attrs: { id: "name", type: "text", autocomplete: "name" },
-                  model: {
-                    value: _vm.form.name,
-                    callback: function($$v) {
-                      _vm.$set(_vm.form, "name", $$v)
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.form.name,
+                      expression: "form.name"
+                    }
+                  ],
+                  staticClass:
+                    " mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm",
+                  attrs: { type: "text", autocomplete: "name" },
+                  domProps: { value: _vm.form.name },
+                  on: {
+                    change: function($event) {
+                      _vm.form.errors.name = ""
                     },
-                    expression: "form.name"
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.form, "name", $event.target.value)
+                    }
                   }
                 }),
                 _vm._v(" "),
@@ -33893,21 +33949,40 @@ var render = function() {
               [
                 _c("jet-label", { attrs: { for: "email", value: "Email" } }),
                 _vm._v(" "),
-                _c("jet-input", {
-                  staticClass: "mt-1 block w-full",
-                  attrs: { id: "email", type: "email" },
-                  model: {
-                    value: _vm.form.email,
-                    callback: function($$v) {
-                      _vm.$set(_vm.form, "email", $$v)
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.form.email,
+                      expression: "form.email"
+                    }
+                  ],
+                  staticClass:
+                    " mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm",
+                  attrs: { type: "text", autocomplete: "email" },
+                  domProps: { value: _vm.form.email },
+                  on: {
+                    change: function($event) {
+                      _vm.form.errors.email = ""
                     },
-                    expression: "form.email"
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.form, "email", $event.target.value)
+                    }
                   }
                 }),
                 _vm._v(" "),
                 _c("jet-input-error", {
                   staticClass: "mt-2",
                   attrs: { message: _vm.form.errors.email }
+                }),
+                _vm._v(" "),
+                _c("jet-input-error", {
+                  staticClass: "mt-2",
+                  attrs: { message: _vm.form.errors.emailExists }
                 })
               ],
               1
@@ -34037,6 +34112,9 @@ var render = function() {
                       attrs: { id: "agenda", name: "agenda" },
                       domProps: { value: _vm.form.agenda },
                       on: {
+                        change: function($event) {
+                          _vm.form.errors.agenda = ""
+                        },
                         input: function($event) {
                           if ($event.target.composing) {
                             return
