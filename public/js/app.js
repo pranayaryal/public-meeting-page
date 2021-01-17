@@ -4504,6 +4504,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4526,8 +4534,8 @@ __webpack_require__.r(__webpack_exports__);
     meeting: Array | Object,
     registrations: Array | Object
   },
-  created: function created() {
-    console.log("This is start ".concat(this.meeting.id, " from Form.vue"));
+  mounted: function mounted() {
+    console.log("mouned in Form");
   },
   data: function data() {
     return {
@@ -4543,24 +4551,31 @@ __webpack_require__.r(__webpack_exports__);
           email: "",
           emailExists: "",
           agenda: "",
-          show: ''
+          show: ""
         }
       }
     };
   },
   methods: {
+    register: function register() {
+      if (this.validate()) {
+        this.$emit("register", this.form);
+      }
+    },
     validate: function validate() {
-      console.log('you are in validate');
-      this.form.errors.emailExists = this.checkIfEmailAssociatedWithMeeting() ? 'That email already exists for this meeting' : '';
-      this.form.errors.email = this.validateEmail() ? '' : 'Email is incorrect. Please check your email';
-      this.form.errors.agenda = this.form.agenda === '' ? 'Agenda is required' : '';
-      this.form.errors.name = this.form.name === '' ? 'Name is required' : '';
-      return this.form.errors.email === '' && this.form.errors.name == '' && this.form.errors.agenda == '' && this.validateEmail() && !this.checkIfEmailAssociatedWithMeeting();
+      console.log("you are in validate");
+      this.checkIfEmailAssociatedWithMeeting();
+      this.form.errors.emailExists = this.checkIfEmailAssociatedWithMeeting() ? "That email already exists for this meeting" : "";
+      this.form.errors.email = this.validateEmail() ? "" : "Email is incorrect. Please check your email";
+      this.form.errors.agenda = this.form.agenda === "" ? "Agenda is required" : "";
+      this.form.errors.name = this.form.name === "" ? "Name is required" : "";
+      return this.form.errors.email === "" && this.form.errors.name == "" && this.form.errors.agenda == "" && this.validateEmail() && !this.checkIfEmailAssociatedWithMeeting();
     },
     checkIfEmailAssociatedWithMeeting: function checkIfEmailAssociatedWithMeeting() {
       var _this = this;
 
       var emailExists = false;
+      console.log(this.registrations);
       this.registrations.map(function (reg) {
         if (reg.email === _this.form.email) {
           emailExists = true;
@@ -4572,31 +4587,11 @@ __webpack_require__.r(__webpack_exports__);
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(String(this.form.email).toLowerCase());
     },
-    register: function register() {
-      var _this2 = this;
-
-      console.log(this.validate());
-
-      if (this.validate()) {
-        axios.post(route("meetings.register"), {
-          name: this.form.name,
-          email: this.form.email,
-          rsvp: this.form.rsvp,
-          agenda: this.form.agenda,
-          show: this.form.show,
-          meeting_id: this.meeting.id
-        }).then(function () {
-          console.log('success');
-
-          _this2.form.reset();
-        })["catch"](function (error) {
-          console.log(error.response.data.errors);
-          _this2.form.errors.email = error.response.data.errors.email[0];
-          _this2.form.errors.name = error.response.data.errors.name[0];
-          _this2.form.errors.rsvp = error.response.data.errors.rsvp[0];
-          _this2.form.errors.agenda = error.response.data.errors.agenda[0];
-        });
-      }
+    resetForm: function resetForm() {
+      this.form.email = "";
+      this.form.name = "";
+      this.form.rsvp = "";
+      this.form.agenda = "";
     }
   }
 });
@@ -4799,6 +4794,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4808,15 +4809,67 @@ __webpack_require__.r(__webpack_exports__);
     RegistrationForm: _Form__WEBPACK_IMPORTED_MODULE_1__.default,
     FormContainer: _FormContainer__WEBPACK_IMPORTED_MODULE_2__.default
   },
+  data: function data() {
+    return {
+      form: {
+        name: "",
+        email: "",
+        rsvp: "yes",
+        agenda: "",
+        show: true,
+        meeting_id: this.meeting.id,
+        errors: {
+          name: "",
+          email: "",
+          emailExists: "",
+          agenda: "",
+          show: ""
+        }
+      }
+    };
+  },
   props: {
     meeting: Array | Object,
-    registrations: Array,
-    registrationExists: Boolean
+    registrations: Array | Object
   },
-  created: function created() {
-    console.log(this.meeting.start.substring(0, 10));
-    console.log(this.registrations);
-    console.log("The registration exists is ".concat(this.registrationExists));
+  mounted: function mounted() {
+    console.log("you are mounted in Show");
+  },
+  methods: {
+    register: function register(form) {
+      var _this = this;
+
+      this.form = form;
+      console.log(this.form);
+      axios.post(route("meetings.register"), {
+        name: this.form.name,
+        email: this.form.email,
+        rsvp: this.form.rsvp,
+        agenda: this.form.agenda,
+        show: this.form.show,
+        meeting_id: this.meeting.id
+      }).then(function (res) {
+        _this.registrations.push(res.data.registration);
+      })["catch"](function (error) {
+        console.log(error.response.data.errors);
+      });
+    },
+    registrationExists: function registrationExists() {
+      var _this2 = this;
+
+      var emailExists = false;
+      console.log("you are in registrationExists in Show");
+
+      if (this.registrations[0] != undefined) {
+        this.registrations.map(function (reg) {
+          if (reg.email === _this2.form.email) {
+            emailExists = true;
+          }
+        });
+      }
+
+      return emailExists;
+    }
   }
 });
 
@@ -33887,16 +33940,14 @@ var render = function() {
       {
         key: "title",
         fn: function() {
-          return [_vm._v("\n        RSVP Information\n    ")]
+          return [_vm._v(" RSVP Information ")]
         },
         proxy: true
       },
       {
         key: "description",
         fn: function() {
-          return [
-            _vm._v("\n      Enter your name, email, rsvp and agenda\n    ")
-          ]
+          return [_vm._v(" Enter your name, email, rsvp and agenda ")]
         },
         proxy: true
       },
@@ -33920,7 +33971,7 @@ var render = function() {
                     }
                   ],
                   staticClass:
-                    " mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm",
+                    "mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm",
                   attrs: { type: "text", autocomplete: "name" },
                   domProps: { value: _vm.form.name },
                   on: {
@@ -33960,7 +34011,7 @@ var render = function() {
                     }
                   ],
                   staticClass:
-                    " mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm",
+                    "mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm",
                   attrs: { type: "text", autocomplete: "email" },
                   domProps: { value: _vm.form.email },
                   on: {
@@ -34218,7 +34269,7 @@ var render = function() {
                 staticClass: "mr-3",
                 attrs: { on: _vm.form.recentlySuccessful }
               },
-              [_vm._v("\n            Saved.\n        ")]
+              [_vm._v("\n      Saved.\n    ")]
             ),
             _vm._v(" "),
             _c(
@@ -34227,7 +34278,7 @@ var render = function() {
                 class: { "opacity-25": _vm.form.processing },
                 attrs: { disabled: _vm.form.processing }
               },
-              [_vm._v("\n            Save\n        ")]
+              [_vm._v("\n      Save\n    ")]
             )
           ]
         },
@@ -34431,7 +34482,7 @@ var render = function() {
                   staticClass:
                     "font-semibold text-xl text-gray-800 leading-tight"
                 },
-                [_vm._v("\n      Meeting\n    ")]
+                [_vm._v("Meeting")]
               )
             ]
           },
@@ -34512,58 +34563,75 @@ var render = function() {
                             _vm._s(
                               "Start: " + _vm.meeting.start.substring(0, 10)
                             ) +
-                            " - " +
+                            " -\n                " +
                             _vm._s("End: " + _vm.meeting.end.substring(0, 10)) +
                             "\n              "
                         )
                       ]),
                       _vm._v(" "),
-                      _c("a", { attrs: { href: "https://laravel.com/docs" } }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass:
-                              "mt-3 flex items-center text-sm font-semibold text-indigo-700"
-                          },
-                          [
-                            _c("div", [_vm._v("See the public page")]),
+                      _vm.registrations[0] != undefined
+                        ? _c("div", { staticClass: "mt-12" }, [
+                            _c("p", { staticClass: "text-lg text-gray-600" }, [
+                              _vm._v("RSVPs For This Meeting")
+                            ]),
                             _vm._v(" "),
-                            _c("div", { staticClass: "ml-1 text-indigo-500" }, [
-                              _c(
-                                "svg",
-                                {
-                                  staticClass: "w-4 h-4",
-                                  attrs: {
-                                    viewBox: "0 0 20 20",
-                                    fill: "currentColor"
-                                  }
-                                },
-                                [
-                                  _c("path", {
-                                    attrs: {
-                                      "fill-rule": "evenodd",
-                                      d:
-                                        "M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z",
-                                      "clip-rule": "evenodd"
-                                    }
-                                  })
-                                ]
-                              )
-                            ])
-                          ]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("a", { attrs: { href: "/meetings" } }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass:
-                              "mt-3 flex items-center text-sm font-semibold text-indigo-700"
-                          },
-                          [_c("div", [_vm._v("< Back")])]
-                        )
-                      ])
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "flex-column mt-2 text-sm text-gray-500"
+                              },
+                              _vm._l(_vm.registrations, function(
+                                registration,
+                                index
+                              ) {
+                                return _c(
+                                  "div",
+                                  { key: registration.id, staticClass: "mt-2" },
+                                  [
+                                    registration.show_public
+                                      ? _c("div", [
+                                          _c(
+                                            "p",
+                                            { staticClass: "text-gray-800" },
+                                            [
+                                              _vm._v(
+                                                "\n                        " +
+                                                  _vm._s(index + 1) +
+                                                  ". " +
+                                                  _vm._s(registration.name) +
+                                                  "\n                      "
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          registration.show_public
+                                            ? _c("p", [
+                                                _vm._v(
+                                                  "\n                        Agenda: " +
+                                                    _vm._s(
+                                                      registration.agenda_items
+                                                    ) +
+                                                    "\n                      "
+                                                )
+                                              ])
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _c("p", [
+                                            _vm._v(
+                                              "RSVP: " +
+                                                _vm._s(registration.rsvp)
+                                            )
+                                          ])
+                                        ])
+                                      : _vm._e()
+                                  ]
+                                )
+                              }),
+                              0
+                            )
+                          ])
+                        : _vm._e()
                     ])
                   ])
                 ]
@@ -34577,6 +34645,10 @@ var render = function() {
                     attrs: {
                       meeting: _vm.meeting,
                       registrations: _vm.registrations
+                    },
+                    on: {
+                      register: _vm.register,
+                      checkEmailExistsForRegistration: _vm.registrationExists
                     }
                   })
                 ],

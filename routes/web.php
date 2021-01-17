@@ -26,6 +26,7 @@ Route::get('/', function () {
 });
 
 Route::get('/meetings/{id}/public', [ MeetingsController::class, 'showPublic' ])->name('public.show');
+Route::get('/registrations/{id}', [ MeetingsController::class, 'registrations' ])->name('registrations');
 
 Route::post('/meetings/register', [ MeetingsController::class, 'register' ])->name('meetings.register');
 

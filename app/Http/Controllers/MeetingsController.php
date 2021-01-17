@@ -34,7 +34,9 @@ class MeetingsController extends Controller
     {
         $meeting = Meeting::find($meetingId);
 
-        $registrations = $this->getRegistrations($meetingId);
+        $registrations = Registration::where([
+          'meeting_id' => $meetingId
+        ])->get();
 
         return \Inertia\Inertia::render('Meetings/Show', [
           'meeting' => $meeting,
@@ -42,13 +44,21 @@ class MeetingsController extends Controller
         ]);
     }
 
-    public function getRegistrations($meetingId)
+    public function registrations($meetingId)
     {
-        $registration = Registration::where([
+        $registrations = Registration::where([
           'meeting_id' => $meetingId
         ])->get();
+        
+        if(count($registrations) != 0){
+          return json_encode([
+            'registrations' => $registrations
+          ]);
+        }
+        return json_encode([
+          'registrations' => false
+        ]);
 
-        return $registration;
 
     }
 
@@ -65,14 +75,11 @@ class MeetingsController extends Controller
 
         $registration->save();
 
-        $meeting = Meeting::find($request->meeting_id);
-        $registrations = $this->getRegistrations($request->meeting_id);
-
         return json_encode([
-          'registrations' => $registrations,
-          'meeting' => $meeting
+          'registration' => $registration
         ]);
     }
+
 
 
 
