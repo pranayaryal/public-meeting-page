@@ -20,13 +20,10 @@ Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
     ]);
 });
 
 Route::get('/meetings/{id}/public', [ MeetingsController::class, 'showPublic' ])->name('public.show');
-Route::get('/registrations/{id}', [ MeetingsController::class, 'registrations' ])->name('registrations');
 
 Route::post('/meetings/register', [ MeetingsController::class, 'register' ])->name('meetings.register');
 
