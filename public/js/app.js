@@ -4512,6 +4512,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -4532,7 +4533,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     meeting: Array | Object,
-    registrations: Array | Object
+    registrations: Array | Object,
+    successMessage: Boolean
   },
   mounted: function mounted() {
     console.log("mouned in Form");
@@ -4800,6 +4802,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -4825,7 +4828,8 @@ __webpack_require__.r(__webpack_exports__);
           agenda: "",
           show: ""
         }
-      }
+      },
+      successMessage: false
     };
   },
   props: {
@@ -4850,6 +4854,8 @@ __webpack_require__.r(__webpack_exports__);
         meeting_id: this.meeting.id
       }).then(function (res) {
         _this.registrations.push(res.data.registration);
+
+        _this.successMessage = res.data.success;
       })["catch"](function (error) {
         console.log(error.response.data.errors);
       });
@@ -33959,7 +33965,16 @@ var render = function() {
               "div",
               { staticClass: "col-span-6 sm:col-span-4" },
               [
-                _c("jet-label", { attrs: { for: "name", value: "Name" } }),
+                _vm.successMessage
+                  ? _c("p", { staticClass: "text-sm" }, [
+                      _vm._v("Congrats, form was submitted")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("jet-label", {
+                  staticClass: "mt-2",
+                  attrs: { for: "name", value: "Name" }
+                }),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
@@ -34644,7 +34659,8 @@ var render = function() {
                   _c("registration-form", {
                     attrs: {
                       meeting: _vm.meeting,
-                      registrations: _vm.registrations
+                      registrations: _vm.registrations,
+                      successMessage: _vm.successMessage
                     },
                     on: {
                       register: _vm.register,

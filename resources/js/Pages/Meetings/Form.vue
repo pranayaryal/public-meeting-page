@@ -7,7 +7,8 @@
     <template #form>
       <!-- Name -->
       <div class="col-span-6 sm:col-span-4">
-        <jet-label for="name" value="Name" />
+        <p class="text-sm" v-if="successMessage">Congrats, form was submitted</p>
+        <jet-label for="name" value="Name" class="mt-2" />
         <!-- <jet-input id="name"
                   type="text"
                   class="mt-1 block w-full"
@@ -127,6 +128,7 @@ export default {
   props: {
     meeting: Array | Object,
     registrations: Array | Object,
+    successMessage: Boolean
   },
 
   mounted() {

@@ -75,6 +75,7 @@
               @register="register"
               :registrations="registrations"
               @checkEmailExistsForRegistration="registrationExists"
+              :successMessage="successMessage"
             />
           </div>
         </div>
@@ -112,6 +113,7 @@ export default {
           show: "",
         },
       },
+      successMessage: false
     };
   },
 
@@ -140,6 +142,7 @@ export default {
         })
         .then((res) => {
           this.registrations.push(res.data.registration);
+          this.successMessage = res.data.success;
         })
         .catch((error) => {
           console.log(error.response.data.errors);

@@ -22,4 +22,5 @@ class Registration extends Model
         'meeting_id',
         'show_public'
     ];
+
 }
