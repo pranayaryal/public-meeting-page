@@ -5263,13 +5263,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -5792,7 +5785,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
-//
 //
 //
 //
@@ -31086,7 +31078,7 @@ var render = function() {
                       [
                         _c(
                           "inertia-link",
-                          { attrs: { href: _vm.route("dashboard") } },
+                          { attrs: { href: _vm.route("home") } },
                           [
                             _c("jet-application-mark", {
                               staticClass: "block h-9 w-auto"
@@ -31110,7 +31102,7 @@ var render = function() {
                           {
                             attrs: {
                               href: _vm.route("meetings"),
-                              active: _vm.route().current("dashboard")
+                              active: _vm.route().current("meetings")
                             }
                           },
                           [
@@ -35262,25 +35254,6 @@ var render = function() {
                 )
               : _vm._e(),
             _vm._v(" "),
-            _vm.$page.props.jetstream.canManageTwoFactorAuthentication
-              ? _c(
-                  "div",
-                  [
-                    _c("two-factor-authentication-form", {
-                      staticClass: "mt-10 sm:mt-0"
-                    }),
-                    _vm._v(" "),
-                    _c("jet-section-border")
-                  ],
-                  1
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _c("logout-other-browser-sessions-form", {
-              staticClass: "mt-10 sm:mt-0",
-              attrs: { sessions: _vm.sessions }
-            }),
-            _vm._v(" "),
             _vm.$page.props.jetstream.hasAccountDeletionFeatures
               ? [
                   _c("jet-section-border"),
@@ -36112,14 +36085,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "ml-4 text-lg leading-7 font-semibold" }, [
-      _c(
-        "a",
-        {
-          staticClass: "underline text-gray-900 dark:text-white",
-          attrs: { href: "https://laravel.com/docs" }
-        },
-        [_vm._v("Boardable")]
-      )
+      _c("p", { staticClass: "underline text-gray-900 dark:text-white" }, [
+        _vm._v("Boardable")
+      ])
     ])
   }
 ]

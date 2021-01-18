@@ -21,7 +21,7 @@ Route::get('/', function () {
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
     ]);
-});
+})->name('home');
 
 Route::get('/meetings/{id}/public', [ MeetingsController::class, 'showPublic' ])->name('public.show');
 

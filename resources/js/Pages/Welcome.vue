@@ -50,10 +50,9 @@
                 ></path>
               </svg>
               <div class="ml-4 text-lg leading-7 font-semibold">
-                <a
-                  href="https://laravel.com/docs"
+                <p
                   class="underline text-gray-900 dark:text-white"
-                  >Boardable</a
+                  >Boardable</p
                 >
               </div>
             </div>
